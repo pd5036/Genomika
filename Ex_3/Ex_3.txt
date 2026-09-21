@@ -1,0 +1,17 @@
+    1  multiqc --help
+    2  cd Ex_3
+    3  conda activate SRA_tools_fix
+    4  fastq-dump --split-3 --gzip SRR25629153 --skip-technical 
+    5  conda activate MultiQC
+    6  multiqc /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3 -f -v /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3
+    7  multiqc -o /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3 -f -v /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3
+    8  multiqc -o /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3 -f -v /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Dane/
+    9  ls
+   10  cd Dane
+   11  cd ..
+   12  cd Dane/
+   13  ls 
+   14  fastqc *.fastq.gz
+   15  fastqc -f fastq --noextract -t 16 *.fastq.gz 
+   16  multiqc -o /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_3 -f -v /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Dane/
+   17  history > Ex_3.txt

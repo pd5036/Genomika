@@ -1,0 +1,5 @@
+    1  history > Ex_2.txt
+    2  conda activate FastQC
+    3  fastqc -o /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_2 -f fastq --noextract -t 4 /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_1/SRR25629155_1.fastq.gz
+    4  fastqc -o /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_2 -f fastq --noextract -t 4 /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_1/SRR25629155_2.fastq.gz
+    5  history > Ex_2.txt

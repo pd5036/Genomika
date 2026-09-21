@@ -1,0 +1,19 @@
+
+  494  conda env list
+  495  conda activate sra_tools
+  496  ls
+  497  conda env list
+  498  conda activate sra_tools
+  499  conda install -c bioconda sra-tools
+  500  fastq-dump --help
+  501  fastq-dump --split-3 --gzip SRR25629155 --skip-technical
+  502  fastq-dump --split-files --gzip SRR25629155
+  503  conda create -n SRA_tools_fix -c bioconda sra-tools=2.11.0 -y
+  504  conda activate SRA_tools_fix
+  505  fastq-dump --split-3 --gzip SRR25629155 --skip-technical
+  506  zcat SRR25629155_1.fastq.gz | head
+  507  vdb-config
+  508  vdb-config -i
+  509  zcat SRR25629155_1.fastq.gz | head
+  510  history > Ex_1.txt
+FLOW CELL number HWFV2DRXY

@@ -1,0 +1,50 @@
+# Aktywacja środowiska i instalacja Samtools
+conda activate mapping
+conda install -c bioconda samtools -y
+
+# Konwersja SAM do BAM
+samtools view -bS Ecoli_rep1.sam > Ecoli_rep1.bam
+
+# Sortowanie BAM według koordynatów
+samtools sort Ecoli_rep1.bam -o Ecoli_rep1_sorted.bam
+
+# Indeksowanie posortowanego pliku BAM
+samtools index Ecoli_rep1_sorted.bam
+
+# Sprawdzenie zajętości dyskowej plików SAM i BAM
+du -sh Ecoli_rep1.sam
+du -sh Ecoli_rep1.bam
+du -sh Ecoli_rep1_sorted.bam
+du -sh Ecoli_rep1_sorted.bam.bai
+
+# Skrypt mapujący pozostałe dwa przycięte powtórzenia biologiczne
+cat << EOF > map_others.sh
+#!/bin/bash
+# Mapowanie SRR25629154 i SRR25629153
+
+for sample in SRR25629154 SRR25629153
+do
+  echo "Mapowanie: $sample"
+  bwa mem genome_index/Ecoli_K12.fasta ${sample}_1_trimmed.fastq.gz ${sample}_2_trimmed.fastq.gz > ${sample}.sam
+  samtools view -bS ${sample}.sam > ${sample}.bam
+done
+EOF
+
+chmod +x map_others.sh
+./map_others.sh
+
+# Naprawa sparowanych końców i usuwanie duplikatów PCR
+for sample in Ecoli_rep1 SRR25629154 SRR25629153
+do
+  echo "Fixmate: $sample"
+  samtools fixmate -m ${sample}.bam ${sample}_fixmate.bam
+
+  echo "Sortowanie: $sample"
+  samtools sort ${sample}_fixmate.bam -o ${sample}_fixmate_sorted.bam
+
+  echo "Indeksowanie: $sample"
+  samtools index ${sample}_fixmate_sorted.bam
+
+  echo "Usuwanie duplikatów: $sample"
+  samtools markdup -r ${sample}_fixmate_sorted.bam ${sample}_dedup.bam
+done

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+# Liczba wątków
+THREADS=8
+
+echo "=== 1. Przygotowanie katalogów i pobieranie danych ==="
+mkdir -p raw_data fastqc_out multiqc_out reference star_index star_out
+
+# Mapowanie próbek: SRR -> Własna nazwa
+declare -A SAMPLES=(
+    ["SRR28075700"]="WT_rep1"
+    ["SRR28075699"]="WT_rep2"
+    ["SRR28075698"]="MT_rep1"
+    ["SRR28075697"]="MT_rep2"
+)
+
+# Pobieranie odczytów przez SRA-Toolkit i zmiana nazw
+for SRR in "${!SAMPLES[@]}"; do
+    NAME="\({SAMPLES[\)SRR]}"
+    echo "Pobieranie \({SRR} (\){NAME})..."
+    fasterq-dump --threads "\(THREADS" --outdir raw_data "\)SRR"
+    gzip raw_data/"${SRR}.fastq"
+    mv raw_data/"\({SRR}.fastq.gz" raw_data/"\){NAME}.fastq.gz"
+done
+
+echo "=== 2. Kontrola jakości (FastQC & MultiQC) ==="
+fastqc -t "$THREADS" raw_data/*.fastq.gz -o fastqc_out/
+multiqc fastqc_out/ -o multiqc_out/
+
+echo "=== 3. Pobranie genomu hg38 i adnotacji GENCODE ==="
+# Genom referencyjny z UCSC
+if [ ! -f reference/hg38.fa ]; then
+    echo "Pobieranie genomu hg38..."
+    wget -c https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz -P reference/
+    gunzip -c reference/hg38.fa.gz > reference/hg38.fa
+fi
+
+# Adnotacja GTF z GENCODE
+if [ ! -f reference/gencode.annotation.gtf ]; then
+    echo "Pobieranie adnotacji GENCODE..."
+    wget -c https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/latest_release/gencode.v46.annotation.gtf.gz -O reference/gencode.annotation.gtf.gz
+    gunzip -c reference/gencode.annotation.gtf.gz > reference/gencode.annotation.gtf
+fi
+
+echo "=== 4. Budowa indeksu STAR ==="
+STAR --runThreadN "$THREADS" \
+     --runMode genomeGenerate \
+     --genomeDir star_index/ \
+     --genomeFastaFiles reference/hg38.fa \
+     --sjdbGTFfile reference/gencode.annotation.gtf \
+     --sjdbOverhang 59
+
+echo "=== 5. Mapowanie próbek (STAR) ze zliczeniami genów ==="
+for NAME in "${SAMPLES[@]}"; do
+    echo "Mapowanie próbki ${NAME}..."
+    STAR --runThreadN "$THREADS" \
+         --genomeDir star_index/ \
+         --readFilesIn raw_data/"${NAME}.fastq.gz" \
+         --readFilesCommand zcat \
+         --outFileNamePrefix star_out/"${NAME}_" \
+         --outSAMtype BAM SortedByCoordinate \
+         --quantMode GeneCounts
+done
+
+echo "Analiza zakonczona pomyślnie. Pliki zliczeń znajdują się w star_out/*_ReadsPerGene.out.ta

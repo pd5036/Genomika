@@ -1,0 +1,36 @@
+
+  511  ls
+  512  mkdir Ex_4
+  513  ls
+  514  cd Ex_4
+  515  ls
+  516  conda create -n trimmomatic_env -y
+  517  conda activate trimmomatic_env
+  518  conda install -c bioconda trimmomatic
+  519  conda activate trimmomatic_env
+  520  ls
+  521  cd ..
+  522  ls
+  523  cd Dane/
+  524  ls
+  525  pwd
+  526  cd ..
+  527  cd Ex_4
+  528  ls
+  529  trimmomatic PE \
+  530  -threads 4 \
+  531  -phred33 \
+  532  /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Dane/SRR25629155_1.fastq.gz SRR25629155_2.fastq.gz \
+  533  SRR25629155_1_trimmed.fastq.gz SRR25629155_1_unpaired.fastq.gz \
+  534  SRR25629155_2_trimmed.fastq.gz SRR25629155_2_unpaired.fastq.gz \
+  535  LEADING:20 \
+  536  SLIDINGWINDOW:5:20 \
+  537  MINLEN:50 
+  538  trimmomatic PE -threads 4 -phred33 /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Dane/SRR25629155_1.fastq.gz /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Dane/SRR25629155_2.fastq.gz /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_4/SRR25629155_1_trimmed.fastq.gz /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_4/SRR25629155_1_unpaired.fastq.gz /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_4/SRR25629155_2_trimmed.fastq.gz /mnt/c/Users/defaultuser0.DESKTOP-9B20QHN/Desktop/PJATK/Bioinformatyka_w_genomice/Ex_4/SRR25629155_2_unpaired.fastq.gz LEADING:20 TRAILING:20 SLIDINGWINDOW:5:20 MINLEN:50
+  539  ls
+  540  fastqc SRR25629155_1_trimmed.fastq.gz SRR25629155_2_trimmed.fastq.gz -o fastqc_trimmed
+  541  mkdir fastqc_trimmed
+  542  fastqc SRR25629155_1_trimmed.fastq.gz SRR25629155_2_trimmed.fastq.gz -o fastqc_trimmed
+  543  ls
+  544  cd fastqc_trimmed/
+  545  history > Ex_4.txt
