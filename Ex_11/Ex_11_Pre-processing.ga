@@ -1,0 +1,154 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "comments": [],
+    "format-version": "0.1",
+    "name": "Pre-processing",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Paired-end reads"
+                }
+            ],
+            "label": "Paired-end reads",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "left": 0.0,
+                "top": 1.54998779296875
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null, \"collection_type\": \"list:paired\"}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "8f729740-3dfd-437c-8cf3-c445c5a8b9ce",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/pjbriggs/trimmomatic/trimmomatic/0.39+galaxy2",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "readtype|fastq_pair": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Trimmomatic",
+                    "name": "readtype"
+                }
+            ],
+            "label": null,
+            "name": "Trimmomatic",
+            "outputs": [
+                {
+                    "name": "fastq_out_paired",
+                    "type": "input"
+                },
+                {
+                    "name": "fastq_out_unpaired",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 317.98133445117577,
+                "top": 0
+            },
+            "post_job_actions": {
+                "RenameDatasetActionfastq_out_paired": {
+                    "action_arguments": {
+                        "newname": "E.Coli_ibuprofen_trimmed"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "fastq_out_paired"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/pjbriggs/trimmomatic/trimmomatic/0.39+galaxy2",
+            "tool_shed_repository": {
+                "changeset_revision": "b9aaed85cbd1",
+                "name": "trimmomatic",
+                "owner": "pjbriggs",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"illuminaclip\": {\"do_illuminaclip\": \"no\", \"__current_case__\": 1}, \"operations\": [{\"__index__\": 0, \"operation\": {\"name\": \"MINLEN\", \"__current_case__\": 1, \"minlen\": \"50\"}}, {\"__index__\": 1, \"operation\": {\"name\": \"SLIDINGWINDOW\", \"__current_case__\": 0, \"window_size\": \"5\", \"required_quality\": \"20\"}}, {\"__index__\": 2, \"operation\": {\"name\": \"TRAILING\", \"__current_case__\": 3, \"trailing\": \"20\"}}, {\"__index__\": 3, \"operation\": {\"name\": \"LEADING\", \"__current_case__\": 2, \"leading\": \"20\"}}], \"output_err\": false, \"output_logs\": false, \"quality_score\": null, \"readtype\": {\"single_or_paired\": \"collection\", \"__current_case__\": 2, \"fastq_pair\": {\"__class__\": \"RuntimeValue\"}}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.39+galaxy2",
+            "type": "tool",
+            "uuid": "d84afd32-ed49-4838-a6ee-0d606f7bff10",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fastqc/fastqc/0.74+galaxy1",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_file": {
+                    "id": 1,
+                    "output_name": "fastq_out_paired"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool FastQC",
+                    "name": "adapters"
+                },
+                {
+                    "description": "runtime parameter for tool FastQC",
+                    "name": "contaminants"
+                },
+                {
+                    "description": "runtime parameter for tool FastQC",
+                    "name": "limits"
+                }
+            ],
+            "label": null,
+            "name": "FastQC",
+            "outputs": [
+                {
+                    "name": "html_file",
+                    "type": "html"
+                },
+                {
+                    "name": "text_file",
+                    "type": "txt"
+                }
+            ],
+            "position": {
+                "left": 651.6500854492188,
+                "top": 1.9666748046875
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fastqc/fastqc/0.74+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "2c64fded1286",
+                "name": "fastqc",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adapters\": {\"__class__\": \"RuntimeValue\"}, \"contaminants\": {\"__class__\": \"RuntimeValue\"}, \"input_file\": {\"__class__\": \"ConnectedValue\"}, \"kmers\": \"7\", \"limits\": {\"__class__\": \"RuntimeValue\"}, \"min_length\": null, \"nogroup\": false, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.74+galaxy1",
+            "type": "tool",
+            "uuid": "803834be-61c7-46e5-b57d-e44579047930",
+            "when": null,
+            "workflow_outputs": []
+        }
+    },
+    "tags": [],
+    "uuid": "c5c8d787-7c92-44e1-9c2e-5338441e67b5",
+    "version": 2
+}
